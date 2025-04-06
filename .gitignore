@@ -4,3 +4,4 @@ __pycache__/
 *.pkl
 *.sqlite3
 .DS_Store
+backend/database/embeddings.db

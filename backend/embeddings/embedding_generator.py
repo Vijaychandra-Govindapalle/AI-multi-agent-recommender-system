@@ -1,15 +1,20 @@
+# backend/embeddings/embedding_generator.py
+
 import requests
-import json
+from backend.database.db_manager import get_embedding_from_db, save_embedding_to_db
 
-def get_embedding(text: str, model: str = "nomic-embed-text") -> list:
-    url = "http://localhost:11434/api/embeddings"
-    headers = {"Content-Type": "application/json"}
-    data = {"model": model, "prompt": text}
+OLLAMA_URL = "http://localhost:11434/api/embeddings"
+MODEL_NAME = "nomic-embed-text"
 
-    response = requests.post(url, headers=headers, data=json.dumps(data))
+def get_embedding(text: str, entity_id: str, entity_type: str):
+    cached = get_embedding_from_db(entity_id, entity_type)
+    if cached:
+        return cached
 
-    if response.status_code != 200:
-        raise RuntimeError(f"Embedding generation failed: {response.text}")
-
-    result = response.json()
-    return result["embedding"]
+    response = requests.post(OLLAMA_URL, json={"model": MODEL_NAME, "prompt": text})
+    if response.status_code == 200 and "embedding" in response.json():
+        embedding = response.json()["embedding"]
+        save_embedding_to_db(entity_id, entity_type, embedding)
+        return embedding
+    else:
+        raise RuntimeError("Embedding generation failed")
