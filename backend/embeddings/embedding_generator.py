@@ -1,7 +1,7 @@
 # backend/embeddings/embedding_generator.py
 
 import requests
-from backend.database.db_manager import get_embedding_from_db, save_embedding_to_db
+from database.db_manager import get_embedding_from_db, save_embedding_to_db
 
 OLLAMA_URL = "http://localhost:11434/api/embeddings"
 MODEL_NAME = "nomic-embed-text"

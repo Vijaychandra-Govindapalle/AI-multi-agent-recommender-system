@@ -1,7 +1,7 @@
 menv/
 __pycache__/
 *.pyc
-*.pkl
 *.sqlite3
 .DS_Store
 backend/database/embeddings.db
+backend/test_agent.py
