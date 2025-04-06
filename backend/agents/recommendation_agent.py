@@ -1,5 +1,3 @@
-# backend/agents/recommendation_agent.py
-
 import heapq
 from backend.agents.customer_agent import CustomerAgent
 from backend.agents.product_agent import ProductAgent
@@ -18,13 +16,47 @@ class RecommendationAgent:
         if not intent:
             return []
 
-        intent_embedding = get_embedding(intent, entity_id=customer_id, entity_type="customer")
+        # Split multi-interest intent into individual topics
+        interest_phrases = [s.strip() for s in intent.split(',') if s.strip()]
+        if not interest_phrases:
+            interest_phrases = [intent.strip()]
 
-        product_scores = []
-        for product_id, product_embedding in self.product_agent.embeddings.items():
-            score = cosine_similarity(intent_embedding, product_embedding)
-            product_scores.append((score, product_id))
+        interest_embeddings = [
+            get_embedding(interest, entity_id=f"{customer_id}_{i}", entity_type="customer_intent")
+            for i, interest in enumerate(interest_phrases)
+        ]
 
-        top_matches = heapq.nlargest(top_n, product_scores, key=lambda x: x[0])
-        recommended_products = [product_id for _, product_id in top_matches]
+        # Get top matches per interest
+        selected_products = set()
+        for interest_emb in interest_embeddings:
+            best_score = -1
+            best_product = None
+            for product_id, product_embedding in self.product_agent.embeddings.items():
+                if product_id in selected_products:
+                    continue
+                score = cosine_similarity(interest_emb, product_embedding)
+                if score > best_score:
+                    best_score = score
+                    best_product = product_id
+            if best_product:
+                selected_products.add(best_product)
+
+        # Fill remaining slots if we haven't hit top_n
+        if len(selected_products) < top_n:
+            remaining_slots = top_n - len(selected_products)
+            additional_scores = []
+            for product_id, product_embedding in self.product_agent.embeddings.items():
+                if product_id in selected_products:
+                    continue
+                similarities = [cosine_similarity(emb, product_embedding) for emb in interest_embeddings]
+                avg_score = sum(similarities) / len(similarities)
+                additional_scores.append((avg_score, product_id))
+
+            additional_scores.sort(reverse=True)
+            for _, product_id in additional_scores[:remaining_slots]:
+                selected_products.add(product_id)
+
+        recommended_products = [
+            self.product_agent.get_product_by_id(pid) for pid in selected_products
+        ]
         return recommended_products
