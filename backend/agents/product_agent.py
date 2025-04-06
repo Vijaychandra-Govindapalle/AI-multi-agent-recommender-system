@@ -1,5 +1,5 @@
 import pandas as pd
-from embeddings.embedding_generator import get_embedding
+from backend.embeddings.embedding_generator import get_embedding
 import os
 import pickle
 
