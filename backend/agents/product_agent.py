@@ -1,10 +1,10 @@
 import pandas as pd
-from backend.embeddings.embedding_generator import get_embedding
+from embeddings.embedding_generator import get_embedding
 import os
 import pickle
 
 class ProductAgent:
-    def __init__(self, product_csv_path="backend/data/products.csv", cache_path="backend/embeddings/product_embeddings.pkl"):
+    def __init__(self, product_csv_path="data/products.csv", cache_path="embeddings/product_embeddings.pkl"):
         self.products = pd.read_csv(product_csv_path).fillna("N/A")
         self.cache_path = cache_path
         self.embeddings = self.load_or_generate_embeddings()

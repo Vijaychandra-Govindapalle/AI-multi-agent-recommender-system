@@ -1,8 +1,8 @@
 import heapq
-from backend.agents.customer_agent import CustomerAgent
-from backend.agents.product_agent import ProductAgent
-from backend.embeddings.embedding_generator import get_embedding
-from backend.utils.similarity import cosine_similarity
+from agents.customer_agent import CustomerAgent
+from agents.product_agent import ProductAgent
+from embeddings.embedding_generator import get_embedding
+from utils.similarity import cosine_similarity
 
 
 class RecommendationAgent:

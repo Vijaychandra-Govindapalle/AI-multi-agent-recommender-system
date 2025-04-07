@@ -70,7 +70,8 @@ export default function Home() {
         {recommendations.length > 0 && (
           <div className="mt-6 space-y-3">
             <h2 className="text-xl font-semibold text-center text-green-400">Recommended Products</h2>
-            {recommendations.map((rec: any, idx) => (
+            { // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            recommendations.map((rec: any, idx) => (
               <ProductCard key={idx} rec={rec} />
           ))}
 
@@ -104,7 +105,7 @@ export default function Home() {
     </main>
   )
 }
-
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function ProductCard({ rec }: { rec: any }) {
   const [showMore, setShowMore] = useState(false)
   console.log("Rendering Recommendation:", rec)

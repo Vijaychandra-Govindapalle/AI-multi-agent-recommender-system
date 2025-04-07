@@ -1,10 +1,11 @@
-import pandas as pd
-import subprocess
 import json
+import pandas as pd
+import requests
 
 class CustomerAgent:
-    def __init__(self, csv_path: str = "backend/data/customers.csv"):
+    def __init__(self, csv_path: str = "data/customers.csv"):
         self.customers = pd.read_csv(csv_path)
+        self.ollama_url = "http://172.17.0.1:11434/api/chat"
 
     def get_customer_profile(self, customer_id: str) -> dict:
         customer = self.customers[self.customers["Customer_ID"] == customer_id]
@@ -19,13 +20,18 @@ class CustomerAgent:
             f"Only output the customer intent in one sentence."
         )
 
-        result = subprocess.run(
-            ["ollama", "run", "llama3", prompt],
-            capture_output=True,
-            text=True
-        )
+        payload = {
+            "model": "llama3",
+            "messages": [{"role": "user", "content": prompt}],
+            "stream": False  # Make sure stream is disabled for a single JSON response
+        }
 
-        if result.returncode != 0:
-            raise RuntimeError("Failed to extract intent from customer profile")
-
-        return result.stdout.strip()
+        try:
+            response = requests.post(self.ollama_url, json=payload)
+            response.raise_for_status()
+            response_data = response.json()  # should now be a single JSON object
+            return response_data["message"]["content"].strip()
+        except json.JSONDecodeError as e:
+            raise RuntimeError(f"JSON decoding failed: {e}\nRaw response:\n{response.text}")
+        except Exception as e:
+            raise RuntimeError(f"Failed to extract intent from customer profile: {e}")

@@ -1,6 +1,6 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-from backend.agents.recommendation_agent import RecommendationAgent
+from agents.recommendation_agent import RecommendationAgent
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
