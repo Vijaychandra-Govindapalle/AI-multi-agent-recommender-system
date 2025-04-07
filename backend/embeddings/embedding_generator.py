@@ -1,7 +1,7 @@
 import requests
 from database.db_manager import get_embedding_from_db, save_embedding_to_db
 
-OLLAMA_URL = "http://172.17.0.1:11434/api/embeddings"
+OLLAMA_URL = "http://ollama:11434/api/embeddings"
 MODEL_NAME = "nomic-embed-text"
 
 def get_embedding(text: str, entity_id: str, entity_type: str):

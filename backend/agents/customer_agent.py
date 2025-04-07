@@ -5,7 +5,7 @@ import requests
 class CustomerAgent:
     def __init__(self, csv_path: str = "data/customers.csv"):
         self.customers = pd.read_csv(csv_path)
-        self.ollama_url = "http://172.17.0.1:11434/api/chat"
+        self.ollama_url = "http://ollama:11434/api/chat"
 
     def get_customer_profile(self, customer_id: str) -> dict:
         customer = self.customers[self.customers["Customer_ID"] == customer_id]
