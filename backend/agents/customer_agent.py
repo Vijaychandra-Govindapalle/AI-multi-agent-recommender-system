@@ -21,7 +21,7 @@ class CustomerAgent:
         )
 
         payload = {
-            "model": "llama3",
+            "model": "tinyllama",
             "messages": [{"role": "user", "content": prompt}],
             "stream": False  # Make sure stream is disabled for a single JSON response
         }
