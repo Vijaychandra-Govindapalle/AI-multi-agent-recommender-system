@@ -59,3 +59,9 @@ exit
 ### 4. Access the application at
 http://localhost:3000
 
+## Demo 
+
+![AI_Demo-0](https://github.com/user-attachments/assets/3677f168-d97a-49fa-873a-2ca4018dd852)
+
+![AI_Demo](https://github.com/user-attachments/assets/3b4034fc-c7e5-4181-a50a-810b3c0d6e78)
+
