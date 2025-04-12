@@ -37,8 +37,8 @@ A multi-agent AI system delivering **hyper-personalized product recommendations*
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/product-recommender.git
-cd product-recommender
+git clone https://github.com/Vijaychandra-Govindapalle/AI-multi-agent-recommender-system.git
+cd AI-multi-agent-recommender-system
 ```
 ### 2. Start the application with docker
 
